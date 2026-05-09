@@ -53,5 +53,40 @@ function restoreHighlight(text, color) {
   }
 }
 
+async function saveNote(id,data){
+  const url = window.location.href;
+  const storageKey = url + '_note';
+  
+  const result = await chrome.storage.local.get(storageKey);
+  const notes = result[storageKey] || {};
 
+  notes[id] = data;
+  await chrome.storage.local.set({ [storageKey]: notes});
+}
+
+async function deleteNote(id){
+  const url = window.location.href;
+  const storageKey = url + '_note';
+
+  const result = await chrome.storage.local.get(storageKey);
+  const notes = result[storageKey] || {};
+  
+  delete notes[id];
+
+  await chrome.storage.local.set({ [storageKey]: notes});
+}
+
+async function loadNotes(){
+  const url = window.location.href;
+  const storageKey = url + '_note';
+
+  const result = await chrome.storage.local.get(storageKey);
+  const notes = result[storageKey];
+
+  if(!notes) return;
+
+  Object.entries(notes).forEach(function([id,data]){
+    createStickyNote(data.x, data.y, id, data.text, data.color);
+  });
+}
 

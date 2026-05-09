@@ -182,9 +182,10 @@ document.addEventListener('dblclick', function (event) {
   saveNote(id, {
     x: event.pageX,
     y: event.pageY,
-    text: " ",
+    text: "",
     color: '#FFEB3B'
   });
 });
 
 loadHighlights();
+loadNotes();
