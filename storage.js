@@ -31,7 +31,7 @@ function restoreHighlight(text, color) {
   while (node = walker.nextNode()) { //Checks if there is next node available and assings the node, returns null which is falsy if no next node
     const index = node.textContent.indexOf(text); // Checks the index of our saved highlight in raw text
     if (index !== -1) {
-      
+
       const range = document.createRange();
       range.setStart(node, index);
       range.setEnd(node, index + text.length);
