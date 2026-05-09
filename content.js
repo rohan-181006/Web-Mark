@@ -44,6 +44,7 @@ tooltip.addEventListener('click',function(event){
   if(!selection || selection.rangeCount === 0) return;
 
   const range = selection.getRangeAt(0);
+  const selectedText = selection.toString().trim();
 
   const mark = document.createElement('mark');
   mark.style.backgroundColor = color;         // Warping the contents of selected range in <mark>
@@ -53,6 +54,7 @@ tooltip.addEventListener('click',function(event){
 
   try{
     range.surroundContents(mark);
+    saveHighlights(selectedText, color);
   }
   catch(e){
     console.log("Complex Selection!!!")
@@ -62,4 +64,4 @@ tooltip.addEventListener('click',function(event){
   tooltip.style.display = 'none';
 });
 
-
+loadHighlights();
