@@ -1,4 +1,11 @@
 console.log("Web Mark content script loaded.");
+let webmarkActive = true; // default state
+
+chrome.storage.local.get('webmark-active', function (result) {
+  if (result['webmark-active'] === false) {
+    webmarkActive = false;
+  }
+});
 
 //--------------------Highlights--------------------
 
@@ -16,6 +23,7 @@ tooltip.style.display = 'none';
 document.body.appendChild(tooltip);
 
 document.addEventListener('mouseup', function (event) {
+  if(!webmarkActive) return;
   const selectedText = window.getSelection().toString().trim();
 
   if (selectedText.length > 0) {
@@ -39,7 +47,6 @@ tooltip.addEventListener('click', function (event) {
   if (event.target.closest('button') === null) {
     return;
   }
-
   const color = event.target.dataset.color;
 
   const selection = window.getSelection();
@@ -48,11 +55,12 @@ tooltip.addEventListener('click', function (event) {
   const range = selection.getRangeAt(0);
   const selectedText = selection.toString().trim();
 
+
+
   const mark = document.createElement('mark');
   mark.style.backgroundColor = color;         // Warping the contents of selected range in <mark>
   mark.style.borderRadius = '3px';
   mark.classList.add('webmark-highlight');
-
 
   try {
     range.surroundContents(mark);
@@ -173,6 +181,7 @@ function createStickyNote(x, y, id = generateId(), text = '', color = '#FFEB3B')
 //Double Click to create note
 
 document.addEventListener('dblclick', function (event) {
+  if(!webmarkActive) return;
   if (event.target.closest('.webmark-note')) return;
   if (event.target.closest('#webmark-tooltip')) return;
 
@@ -188,7 +197,7 @@ document.addEventListener('dblclick', function (event) {
 });
 
 chrome.runtime.onMessage.addListener(function (message) {
-  
+
   if (message.action === 'clearHighlights') {
     document.querySelectorAll('.webmark-highlight').forEach(function (mark) {
       mark.replaceWith(document.createTextNode(mark.innerText));
@@ -209,6 +218,10 @@ chrome.runtime.onMessage.addListener(function (message) {
     document.querySelectorAll('.webmark-note').forEach(function (note) {
       note.remove();
     });
+  }
+
+  if (message.action === 'setActive') {
+    webmarkActive = message.value;
   }
 });
 

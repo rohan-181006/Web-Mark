@@ -5,7 +5,8 @@
     "description": "A web based highlighting extension with sticky notes.",
     "permissions": [
         "activeTab",
-        "storage"
+        "storage",
+        "tabs"
     ],
     "action": {
         "default_popup": "popup.html"
