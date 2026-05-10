@@ -15,35 +15,35 @@ tooltip.innerHTML = `
 tooltip.style.display = 'none';
 document.body.appendChild(tooltip);
 
-document.addEventListener('mouseup', function(event){
+document.addEventListener('mouseup', function (event) {
   const selectedText = window.getSelection().toString().trim();
 
-  if(selectedText.length > 0){
+  if (selectedText.length > 0) {
     tooltip.style.left = event.pageX + 'px';
     tooltip.style.top = (event.pageY - 50) + 'px';
     tooltip.style.display = 'flex';
   }
-  else{
+  else {
     tooltip.style.display = 'none';
   }
 });
 
 
-document.addEventListener('mousedown', function(event){
-  if(event.target.closest('#webmark-tooltip') === null){ // This walks UP the DOM and checks if the event.target has the parent tooltip 
+document.addEventListener('mousedown', function (event) {
+  if (event.target.closest('#webmark-tooltip') === null) { // This walks UP the DOM and checks if the event.target has the parent tooltip 
     tooltip.style.display = 'none';                     //So getting null is the conditon where it is sure that user aint touching tooltip
   }
 });
 
-tooltip.addEventListener('click',function(event){
-  if(event.target.closest('button') === null){
-    return; 
+tooltip.addEventListener('click', function (event) {
+  if (event.target.closest('button') === null) {
+    return;
   }
 
-  const color = event.target.dataset.color; 
+  const color = event.target.dataset.color;
 
   const selection = window.getSelection();
-  if(!selection || selection.rangeCount === 0) return;
+  if (!selection || selection.rangeCount === 0) return;
 
   const range = selection.getRangeAt(0);
   const selectedText = selection.toString().trim();
@@ -54,11 +54,11 @@ tooltip.addEventListener('click',function(event){
   mark.classList.add('webmark-highlight');
 
 
-  try{
+  try {
     range.surroundContents(mark);
     saveHighlights(selectedText, color);
   }
-  catch(e){
+  catch (e) {
     console.log("Complex Selection!!!")
   }
 
@@ -185,6 +185,31 @@ document.addEventListener('dblclick', function (event) {
     text: "",
     color: '#FFEB3B'
   });
+});
+
+chrome.runtime.onMessage.addListener(function (message) {
+  
+  if (message.action === 'clearHighlights') {
+    document.querySelectorAll('.webmark-highlight').forEach(function (mark) {
+      mark.replaceWith(document.createTextNode(mark.innerText));
+    });
+  }
+
+  if (message.action === 'clearNotes') {
+    document.querySelectorAll('.webmark-note').forEach(function (note) {
+      note.remove();
+    });
+  }
+
+  if (message.action === 'clearAll') {
+    document.querySelectorAll('.webmark-highlight').forEach(function (mark) {
+      mark.replaceWith(document.createTextNode(mark.innerText));
+    });
+
+    document.querySelectorAll('.webmark-note').forEach(function (note) {
+      note.remove();
+    });
+  }
 });
 
 loadHighlights();

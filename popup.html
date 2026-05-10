@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <div class="container">
+
+      <div class="header">
+        <span class="logo">WebMark</span>
+        <span class="version">v1.0</span>
+      </div>
+
+      <div class="stats">
+        <div class="stat-box">
+          <span class="stat-num" id="highlight-count">0</span>
+          <span class="stat-label">Highlights</span>
+        </div>
+        <div class="stat-box">
+          <span class="stat-num" id="note-count">0</span>
+          <span class="stat-label">Notes</span>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="btn-clear" id="clear-highlights">Clear Highlights</button>
+        <button class="btn-clear" id="clear-notes">Clear Notes</button>
+        <button class="btn-clear danger" id="clear-all">Clear Everything</button>
+      </div>
+
+      <div class="footer">
+        Working on: <span id="current-url">...</span>
+      </div>
+
+    </div>
+    <script src="popup.js"></script>
+  </body>
+</html>
