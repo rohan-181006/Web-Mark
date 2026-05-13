@@ -90,3 +90,13 @@ async function loadNotes(){
   });
 }
 
+async function removeHighlights(text) {
+  const url = window.location.href;
+  const result = await chrome.storage.local.get(url);
+  let highlights = result[url] || [];
+  
+  highlights = highlights.filter(function (h) {
+    return h.text !== text;
+  });
+  await chrome.storage.local.set({ [url]: highlights });
+}

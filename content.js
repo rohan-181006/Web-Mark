@@ -17,6 +17,7 @@ tooltip.innerHTML = `
   <button data-color="#A5D6A7">🟢</button>
   <button data-color="#90CAF9">🔵</button>
   <button data-color="#EF9A9A">🔴</button>
+  <button id="webmark-delete">🧹</button>
 `;
 
 tooltip.style.display = 'none';
@@ -44,6 +45,7 @@ document.addEventListener('mousedown', function (event) {
 });
 
 tooltip.addEventListener('click', function (event) {
+
   if (event.target.closest('button') === null) {
     return;
   }
@@ -55,7 +57,19 @@ tooltip.addEventListener('click', function (event) {
   const range = selection.getRangeAt(0);
   const selectedText = selection.toString().trim();
 
+  
+  if(event.target.id === 'webmark-delete') { //Delete button is clicked
+    const range = selection.getRangeAt(0);
+    // check if the selected text is inside a highlight mark
+    const parentMark = range.commonAncestorContainer.parentElement.closest('.webmark-highlight');
 
+    if (parentMark) {
+      parentMark.replaceWith(document.createTextNode(parentMark.innerText));
+    }
+    selection.removeAllRanges();
+    tooltip.style.display = 'none';
+    return;
+  }
 
   const mark = document.createElement('mark');
   mark.style.backgroundColor = color;         // Warping the contents of selected range in <mark>
